@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Hub - Khám Phá Kiến Thức</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 0;
+            position: relative;
+        }
+
+        .floating-shapes {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        .shape {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .shape:nth-child(1) {
+            width: 80px;
+            height: 80px;
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+
+        .shape:nth-child(2) {
+            width: 120px;
+            height: 120px;
+            top: 20%;
+            right: 15%;
+            animation-delay: 2s;
+        }
+
+        .shape:nth-child(3) {
+            width: 60px;
+            height: 60px;
+            bottom: 20%;
+            left: 20%;
+            animation-delay: 4s;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        .hero h1 {
+            color: white;
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: slideInDown 1s ease-out;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            animation: slideInUp 1s ease-out 0.3s both;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .qr-section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 60px 40px;
+            margin: 40px 0;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: fadeInScale 1s ease-out 0.6s both;
+            text-align: center;
+            transition: all 0.5s ease;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .qr-info h2 {
+            color: #333;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .qr-info p {
+            color: #666;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .qr-code-wrapper {
+            display: inline-block;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+            margin-bottom: 30px;
+        }
+
+        .qr-code-wrapper:hover {
+            transform: scale(1.05);
+        }
+
+        .qr-instructions {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            margin: 30px auto;
+            max-width: 500px;
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .qr-instructions h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .qr-instructions p {
+            font-size: 1rem;
+            opacity: 0.9;
+            color: white;
+        }
+
+        /* Phần quiz */
+        .quiz-section {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+            pointer-events: none;
+        }
+
+        .quiz-section.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .quiz-header h2 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .quiz-header p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2rem;
+        }
+
+        .quiz-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .quiz-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            overflow: hidden;
+            transform: translateY(30px);
+            opacity: 0;
+        }
+
+        .quiz-card.animate {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .quiz-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .quiz-card:hover::before {
+            left: 100%;
+        }
+
+        .quiz-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+        }
+
+        .quiz-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .quiz-card h3 {
+            color: #333;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .quiz-card p {
+            color: #666;
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .quiz-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quiz-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .quiz-btn:hover::before {
+            left: 100%;
+        }
+
+        .quiz-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 0;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 60px;
+        }
+
+        .social-links {
+            margin-top: 20px;
+        }
+
+        .social-btn {
+            display: inline-block;
+            margin: 0 10px;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-decoration: none;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .social-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .welcome-message {
+            background: rgba(76, 175, 80, 0.9);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+            opacity: 0;
+            transform: translateY(-20px);
+            transition: all 0.5s ease;
+        }
+
+        .welcome-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        /* Ẩn/hiện sections */
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .quiz-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .qr-section {
+                padding: 40px 20px;
+            }
+        }
+
+        .enter-quiz-btn {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            padding: 15px 40px;
+            border-radius: 25px;
+            border: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
+        }
+
+        .enter-quiz-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+        }
+
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        
+        .btn-ripple {
+            position: relative;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hero">
+            <div class="floating-shapes">
+                <div class="shape"></div>
+                <div class="shape"></div>
+                <div class="shape"></div>
+            </div>
+            <h1>🎯 Quiz Hub</h1>
+            <p>Khám phá kiến thức với các bài quiz thú vị và thử thách bản thân!</p>
+        </div>
+
+        <div class="welcome-message" id="welcomeMessage">
+            🎉 Chào mừng bạn đến với Quiz Hub! Hãy chọn quiz yêu thích để bắt đầu.
+        </div>
+
+        <!-- Phần QR Section -->
+        <div class="qr-section" id="qrSection">
+            <div class="qr-info">
+                <h2>📱 Quét QR để bắt đầu</h2>
+                <p>Sử dụng camera điện thoại để quét mã QR bên dưới. Sau khi quét, bạn sẽ được chuyển đến trang với đầy đủ các quiz thú vị để lựa chọn!</p>
+            </div>
+            
+            <div class="qr-code-wrapper">
+                <canvas id="qrcode" width="250" height="250"></canvas>
+            </div>
+
+            <div class="qr-instructions">
+                <h3>📲 Hướng dẫn sử dụng</h3>
+                <p>1. Mở camera trên điện thoại<br>
+                2. Hướng camera vào mã QR<br>
+                3. Nhấn vào link hiển thị để truy cập</p>
+            </div>
+
+            <div class="social-links">
+                <button class="social-btn" onclick="shareQR()">📤 Chia sẻ QR</button>
+                <button class="social-btn" onclick="downloadQR()">💾 Tải QR</button>
+            </div>
+
+            <div style="margin-top: 30px;">
+                <p style="color: #666; margin-bottom: 15px; font-size: 1rem;">
+                    Hoặc nếu bạn đang dùng máy tính:
+                </p>
+                <button id="enterQuizBtn" class="enter-quiz-btn">
+                    🚀 Vào Quiz Ngay
+                </button>
+            </div>
+        </div>
+
+        <!-- Phần Quiz Section -->
+        <div class="quiz-section" id="quizSection">
+            <button class="back-btn" onclick="showQRSection()">← Quay lại QR</button>
+            
+            <div class="quiz-header">
+                <h2>🎮 Chọn Quiz của bạn</h2>
+                <p>Khám phá các chủ đề thú vị và thử thách kiến thức của bạn</p>
+            </div>
+
+            <div class="quiz-grid">
+                <div class="quiz-card">
+                    <div class="quiz-icon">🧠</div>
+                    <h3>Quiz Kiến Thức Tổng Hợp</h3>
+                    <p>Thử thách kiến thức của bạn với các câu hỏi đa dạng từ khoa học, văn hóa đến thể thao.</p>
+                    <a href="https://quizizz.com/join" class="quiz-btn btn-ripple" target="_blank">Bắt đầu Quiz</a>
+                </div>
+
+                <div class="quiz-card">
+                    <div class="quiz-icon">🌍</div>
+                    <h3>Quiz Địa Lý Thế Giới</h3>
+                    <p>Khám phá thế giới qua các câu hỏi về địa lý, văn hóa và đặc điểm của các quốc gia.</p>
+                    <a href="https://quizizz.com/join" class="quiz-btn btn-ripple" target="_blank">Khám phá ngay</a>
+                </div>
+
+                <div class="quiz-card">
+                    <div class="quiz-icon">🔬</div>
+                    <h3>Quiz Khoa Học</h3>
+                    <p>Thử thách với các câu hỏi về vật lý, hóa học, sinh học và những khám phá khoa học mới nhất.</p>
+                    <a href="https://quizizz.com/join" class="quiz-btn btn-ripple" target="_blank">Thử thách</a>
+                </div>
+
+                <div class="quiz-card">
+                    <div class="quiz-icon">🎭</div>
+                    <h3>Quiz Văn Hóa Việt Nam</h3>
+                    <p>Tìm hiểu về lịch sử, văn hóa và truyền thống của đất nước Việt Nam thông qua các câu hỏi thú vị.</p>
+                    <a href="https://quizizz.com/join" class="quiz-btn btn-ripple" target="_blank">Tham gia</a>
+                </div>
+
+                <div class="quiz-card">
+                    <div class="quiz-icon">🎨</div>
+                    <h3>Quiz Nghệ Thuật</h3>
+                    <p>Khám phá thế giới nghệ thuật với các câu hỏi về hội họa, âm nhạc và điện ảnh nổi tiếng.</p>
+                    <a href="https://quizizz.com/join" class="quiz-btn btn-ripple" target="_blank">Khám phá</a>
+                </div>
+
+                <div class="quiz-card">
+                    <div class="quiz-icon">⚡</div>
+                    <h3>Quiz Nhanh 5 Phút</h3>
+                    <p>Thử thách tốc độ với quiz nhanh chỉ trong 5 phút. Hoàn hảo cho giờ nghỉ giải lao!</p>
+                    <a href="https://quizizz.com/join" class="quiz-btn btn-ripple" target="_blank">Thử ngay</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2024 Quiz Hub - Nơi khám phá kiến thức không giới hạn</p>
+            <div class="social-links">
+                <a href="#" class="social-btn">Facebook</a>
+                <a href="#" class="social-btn">Instagram</a>
+                <a href="#" class="social-btn">Twitter</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let qrCanvas = null;
+
+        // Tạo QR code
+        function generateQRCode() {
+            try {
+                const qrContainer = document.getElementById('qrcode');
+                const currentURL = window.location.href.split('?')[0];
+                const qrURL = currentURL + '?mode=quiz';
+                
+                qrContainer.innerHTML = '';
+                
+                const qr = new QRious({
+                    element: qrContainer,
+                    value: qrURL,
+                    size: 250,
+                    background: 'white',
+                    foreground: '#333333',
+                    level: 'M'
+                });
+                
+                qrCanvas = qrContainer;
+                console.log('QR code generated successfully!');
+                
+            } catch (error) {
+                console.error('Error generating QR code:', error);
+                generateQRCodeFallback();
+            }
+        }
+        
+        // Fallback method sử dụng API
+        function generateQRCodeFallback() {
+            const qrContainer = document.getElementById('qrcode');
+            const currentURL = window.location.href.split('?')[0];
+            const qrURL = currentURL + '?mode=quiz';
+            
+            const img = document.createElement('img');
+            img.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(qrURL)}`;
+            img.alt = 'QR Code';
+            img.style.maxWidth = '100%';
+            img.style.height = 'auto';
+            
+            qrContainer.innerHTML = '';
+            qrContainer.appendChild(img);
+            
+            console.log('QR code generated using fallback method');
+        }
+
+        // Hiển thị phần quiz
+        function showQuizSection() {
+            const qrSection = document.getElementById('qrSection');
+            const quizSection = document.getElementById('quizSection');
+            const welcomeMessage = document.getElementById('welcomeMessage');
+            
+            // Ẩn QR section với animation
+            qrSection.style.opacity = '0';
+            qrSection.style.transform = 'translateY(-50px)';
+            
+            setTimeout(() => {
+                qrSection.classList.add('hidden');
+                
+                // Hiển thị welcome message
+                welcomeMessage.classList.add('show');
+                
+                // Hiển thị quiz section
+                setTimeout(() => {
+                    quizSection.classList.add('show');
+                    
+                    // Animate các quiz cards
+                    setTimeout(() => {
+                        const cards = document.querySelectorAll('.quiz-card');
+                        cards.forEach((card, index) => {
+                            setTimeout(() => {
+                                card.classList.add('animate');
+                            }, index * 150);
+                        });
+                    }, 300);
+                }, 500);
+            }, 500);
+        }
+
+        // Hiển thị phần QR
+        function showQRSection() {
+            const qrSection = document.getElementById('qrSection');
+            const quizSection = document.getElementById('quizSection');
+            const welcomeMessage = document.getElementById('welcomeMessage');
+            
+            // Ẩn quiz section
+            quizSection.classList.remove('show');
+            welcomeMessage.classList.remove('show');
+            
+            // Reset quiz cards animation
+            const cards = document.querySelectorAll('.quiz-card');
+            cards.forEach(card => {
+                card.classList.remove('animate');
+            });
+            
+            setTimeout(() => {
+                // Hiển thị QR section
+                qrSection.classList.remove('hidden');
+                qrSection.style.opacity = '1';
+                qrSection.style.transform = 'translateY(0)';
+            }, 500);
+        }
+
+        // Kiểm tra URL params
+        function checkURLParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const mode = urlParams.get('mode');
+            
+            if (mode === 'quiz') {
+                // Tự động chuyển sang phần quiz
+                setTimeout(() => {
+                    showQuizSection();
+                }, 1000);
+            }
+        }
+
+        // Tải QR code
+        function downloadQR() {
+            if (qrCanvas) {
+                try {
+                    const link = document.createElement('a');
+                    link.download = 'quiz-hub-qr.png';
+                    link.href = qrCanvas.toDataURL();
+                    link.click();
+                } catch (error) {
+                    alert('Không thể tải QR code. Vui lòng thử lại!');
+                }
+            }
+        }
+
+        // Chia sẻ QR
+        function shareQR() {
+            const currentURL = window.location.href.split('?')[0] + '?mode=quiz';
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Quiz Hub - Khám Phá Kiến Thức',
+                    text: 'Tham gia các quiz thú vị tại Quiz Hub!',
+                    url: currentURL
+                });
+            } else {
+                // Fallback: copy to clipboard
+                navigator.clipboard.writeText(currentURL).then(() => {
+                    alert('Link đã được sao chép! Bạn có thể chia sẻ với bạn bè.');
+                }).catch(() => {
+                    alert('Link: ' + currentURL);
+                });
+            }
+        }
+
+        // Thêm hiệu ứng ripple cho buttons
+        function addRippleEffect() {
+            const buttons = document.querySelectorAll('.btn-ripple');
+            buttons.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.width = ripple.style.height = size + 'px';
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    ripple.style.position = 'absolute';
+                    ripple.style.borderRadius = '50%';
+                    ripple.style.background = 'rgba(255,255,255,0.5)';
+                    ripple.style.transform = 'scale(0)';
+                    ripple.style.animation = 'ripple 0.6s linear';
+                    ripple.style.pointerEvents = 'none';
+                    
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+        }
+
+        // Khởi tạo khi trang load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Generate QR code
+            setTimeout(() => {
+                generateQRCode();
+            }, 500);
+            
+            // Check URL parameters
+            checkURLParams();
+            
+            // Add button effects
+            addRippleEffect();
+            
+            // Add event listener for Enter Quiz button
+            const enterQuizBtn = document.getElementById('enterQuizBtn');
+            if (enterQuizBtn) {
+                enterQuizBtn.addEventListener('click', function() {
+                    console.log('Enter Quiz button clicked!');
+                    showQuizSection();
+                });
+            }
+        });
+
+        // Keyboard shortcut để test (Ctrl + Q)
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'q' && e.ctrlKey) {
+                e.preventDefault();
+                showQuizSection();
+            }
+        });
+    </script>
+</body>
+</html>
