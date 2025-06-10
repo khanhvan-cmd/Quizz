@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz Hub - Khám Phá Kiến Thức</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,10 +13,33 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0d0d0d 0%, #2c0b0b 100%);
             min-height: 100vh;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        .particle-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 69, 0, 0.5);
+            border-radius: 50%;
+            animation: particleMove 20s linear infinite;
+        }
+
+        @keyframes particleMove {
+            0% { transform: translate(0, 0); opacity: 0.7; }
+            100% { transform: translate(100vw, 100vh); opacity: 0; }
         }
 
         .container {
@@ -27,8 +50,9 @@
 
         .hero {
             text-align: center;
-            padding: 60px 0;
+            padding: 80px 0;
             position: relative;
+            z-index: 1;
         }
 
         .floating-shapes {
@@ -41,119 +65,103 @@
 
         .shape {
             position: absolute;
-            background: rgba(255, 255, 255, 0.1);
+            background: linear-gradient(135deg, rgba(255, 69, 0, 0.4), rgba(178, 34, 34, 0.4));
             border-radius: 50%;
-            animation: float 6s ease-in-out infinite;
+            animation: float 8s ease-in-out infinite;
+            box-shadow: 0 0 20px rgba(255, 69, 0, 0.5);
         }
 
         .shape:nth-child(1) {
-            width: 80px;
-            height: 80px;
-            top: 10%;
+            width: 100px;
+            height: 100px;
+            top: 15%;
             left: 10%;
             animation-delay: 0s;
         }
 
         .shape:nth-child(2) {
-            width: 120px;
-            height: 120px;
-            top: 20%;
-            right: 15%;
+            width: 140px;
+            height: 140px;
+            top: 25%;
+            right: 10%;
             animation-delay: 2s;
         }
 
         .shape:nth-child(3) {
-            width: 60px;
-            height: 60px;
-            bottom: 20%;
-            left: 20%;
+            width: 80px;
+            height: 80px;
+            bottom: 15%;
+            left: 25%;
             animation-delay: 4s;
         }
 
         @keyframes float {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(180deg); }
+            50% { transform: translateY(-30px) rotate(180deg); }
         }
 
         .hero h1 {
-            color: white;
-            font-size: 3.5rem;
-            font-weight: bold;
+            color: #ff4500;
+            font-size: 4rem;
+            font-weight: 700;
             margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            animation: slideInDown 1s ease-out;
+            text-shadow: 0 0 10px rgba(255, 69, 0, 0.8), 0 0 20px rgba(255, 69, 0, 0.4);
+            animation: slideInDown 1.2s ease-out;
             position: relative;
             z-index: 1;
         }
 
         .hero p {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 1.4rem;
             margin-bottom: 40px;
-            animation: slideInUp 1s ease-out 0.3s both;
+            animation: slideInUp 1.2s ease-out 0.3s both;
             position: relative;
             z-index: 1;
         }
 
         @keyframes slideInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-60px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         @keyframes slideInUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(60px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .qr-section {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 25px;
+        .login-section {
+            background: rgba(20, 20, 20, 0.85);
+            border-radius: 30px;
             padding: 60px 40px;
             margin: 40px 0;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            animation: fadeInScale 1s ease-out 0.6s both;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), inset 0 0 10px rgba(255, 69, 0, 0.2);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 69, 0, 0.4);
+            animation: fadeInScale 1.2s ease-out 0.6s both;
             text-align: center;
             transition: all 0.5s ease;
         }
 
         @keyframes fadeInScale {
-            from {
-                opacity: 0;
-                transform: scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+            from { opacity: 0; transform: scale(0.85); }
+            to { opacity: 1; transform: scale(1); }
         }
 
-        .qr-info h2 {
-            color: #333;
-            font-size: 2.5rem;
+        .login-info h2 {
+            color: #ff4500;
+            font-size: 2.8rem;
             margin-bottom: 20px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #ff4500, #b22222);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            text-shadow: 0 0 10px rgba(255, 69, 0, 0.6);
         }
 
-        .qr-info p {
-            color: #666;
-            font-size: 1.2rem;
+        .login-info p {
+            color: #ddd;
+            font-size: 1.3rem;
             line-height: 1.6;
             margin-bottom: 40px;
             max-width: 600px;
@@ -161,46 +169,78 @@
             margin-right: auto;
         }
 
-        .qr-code-wrapper {
-            display: inline-block;
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-            margin-bottom: 30px;
-        }
-
-        .qr-code-wrapper:hover {
-            transform: scale(1.05);
-        }
-
-        .qr-instructions {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            padding: 20px 30px;
-            border-radius: 15px;
-            margin: 30px auto;
-            max-width: 500px;
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
-        }
-
-        .qr-instructions h3 {
-            font-size: 1.3rem;
-            margin-bottom: 10px;
+        .login-form {
             display: flex;
+            flex-direction: column;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
+            gap: 25px;
         }
 
-        .qr-instructions p {
-            font-size: 1rem;
-            opacity: 0.9;
+        .login-form input {
+            padding: 15px;
+            width: 320px;
+            max-width: 100%;
+            border-radius: 12px;
+            border: 2px solid transparent;
+            background: rgba(40, 40, 40, 0.9);
+            color: #fff;
+            font-size: 1.1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(255, 69, 0, 0.3);
+        }
+
+        .login-form input:focus {
+            border-color: #ff4500;
+            box-shadow: 0 0 15px rgba(255, 69, 0, 0.5);
+        }
+
+        .login-form button {
+            background: linear-gradient(135deg, #ff4500, #b22222);
             color: white;
+            padding: 15px 50px;
+            border-radius: 30px;
+            border: none;
+            font-weight: 600;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(255, 69, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            animation: pulseButton 2s infinite;
         }
 
-        /* Phần quiz */
+        @keyframes pulseButton {
+            0% { box-shadow: 0 0 10px rgba(255, 69, 0, 0.5); }
+            50% { box-shadow: 0 0 20px rgba(255, 69, 0, 0.8); }
+            100% { box-shadow: 0 0 10px rgba(255, 69, 0, 0.5); }
+        }
+
+        .login-form button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 69, 0, 0.7);
+        }
+
+        .error-message {
+            color: #ff3333;
+            font-size: 1.1rem;
+            margin-top: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .error-message.show {
+            opacity: 1;
+            animation: shake 0.4s ease;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+
         .quiz-section {
             opacity: 0;
             transform: translateY(50px);
@@ -220,15 +260,15 @@
         }
 
         .quiz-header h2 {
-            color: white;
-            font-size: 2.5rem;
+            color: #ff4500;
+            font-size: 2.8rem;
             margin-bottom: 15px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            text-shadow: 0 0 10px rgba(255, 69, 0, 0.6);
         }
 
         .quiz-header p {
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1.2rem;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 1.3rem;
         }
 
         .quiz-grid {
@@ -238,14 +278,14 @@
         }
 
         .quiz-card {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(30, 30, 30, 0.9);
             border-radius: 20px;
             padding: 30px;
             text-align: center;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.7), inset 0 0 10px rgba(255, 69, 0, 0.2);
             transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 69, 0, 0.4);
             position: relative;
             overflow: hidden;
             transform: translateY(30px);
@@ -255,6 +295,13 @@
         .quiz-card.animate {
             transform: translateY(0);
             opacity: 1;
+            animation: bounceIn 0.6s ease-out;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: translateY(50px); opacity: 0; }
+            60% { transform: translateY(-10px); opacity: 1; }
+            100% { transform: translateY(0); opacity: 1; }
         }
 
         .quiz-card::before {
@@ -264,7 +311,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 69, 0, 0.3), transparent);
             transition: left 0.5s;
         }
 
@@ -274,56 +321,58 @@
 
         .quiz-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
         }
 
         .quiz-icon {
-            width: 80px;
-            height: 80px;
+            width: 90px;
+            height: 90px;
             margin: 0 auto 20px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #ff4500, #b22222);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.5rem;
+            font-size: 2.8rem;
             animation: pulse 2s infinite;
+            box-shadow: 0 0 15px rgba(255, 69, 0, 0.6);
         }
 
         @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+            0% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 69, 0, 0.6); }
+            50% { transform: scale(1.1); box-shadow: 0 0 20px rgba(255, 69, 0, 0.8); }
+            100% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 69, 0, 0.6); }
         }
 
         .quiz-card h3 {
-            color: #333;
-            font-size: 1.5rem;
+            color: #fff;
+            font-size: 1.6rem;
             margin-bottom: 15px;
-            font-weight: bold;
+            font-weight: 600;
         }
 
         .quiz-card p {
-            color: #666;
-            font-size: 1rem;
+            color: #ddd;
+            font-size: 1.1rem;
             line-height: 1.6;
             margin-bottom: 25px;
         }
 
         .quiz-btn {
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            background: linear-gradient(135deg, #ff4500, #b22222);
             color: white;
             border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
-            font-size: 1.1rem;
-            font-weight: bold;
+            padding: 15px 35px;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
             display: inline-block;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 5px 20px rgba(255, 69, 0, 0.5);
         }
 
         .quiz-btn::before {
@@ -333,7 +382,7 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
             transition: left 0.5s;
         }
 
@@ -342,14 +391,14 @@
         }
 
         .quiz-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 69, 0, 0.7);
         }
 
         .footer {
             text-align: center;
             padding: 40px 0;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.7);
             margin-top: 60px;
         }
 
@@ -360,31 +409,34 @@
         .social-btn {
             display: inline-block;
             margin: 0 10px;
-            padding: 10px 20px;
-            background: rgba(255, 255, 255, 0.2);
+            padding: 10px 25px;
+            background: rgba(255, 69, 0, 0.4);
             color: white;
             text-decoration: none;
-            border-radius: 20px;
+            border-radius: 25px;
             transition: all 0.3s ease;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 10px rgba(255, 69, 0, 0.3);
         }
 
         .social-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
+            background: rgba(255, 69, 0, 0.6);
+            transform: translateY(-3px);
+            box-shadow: 0 0 15px rgba(255, 69, 0, 0.5);
         }
 
         .welcome-message {
-            background: rgba(76, 175, 80, 0.9);
+            background: rgba(178, 34, 34, 0.9);
             color: white;
             padding: 15px;
-            border-radius: 10px;
+            border-radius: 12px;
             margin-bottom: 20px;
             text-align: center;
-            font-weight: bold;
+            font-weight: 600;
             opacity: 0;
             transform: translateY(-20px);
             transition: all 0.5s ease;
+            box-shadow: 0 0 15px rgba(178, 34, 34, 0.5);
         }
 
         .welcome-message.show {
@@ -393,58 +445,45 @@
         }
 
         .back-btn {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 69, 0, 0.4);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-size: 1rem;
+            padding: 10px 25px;
+            border-radius: 25px;
+            font-size: 1.1rem;
             cursor: pointer;
             transition: all 0.3s ease;
             margin-bottom: 20px;
-            backdrop-filter: blur(5px);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 10px rgba(255, 69, 0, 0.3);
         }
 
         .back-btn:hover {
-            background: rgba(255, 255, 255, 0.3);
-            transform: translateY(-2px);
+            background: rgba(255, 69, 0, 0.6);
+            transform: translateY(-3px);
+            box-shadow: 0 0 15px rgba(255, 69, 0, 0.5);
         }
 
-        /* Ẩn/hiện sections */
         .hidden {
             display: none !important;
         }
 
         @media (max-width: 768px) {
             .hero h1 {
-                font-size: 2.5rem;
+                font-size: 2.8rem;
             }
             
             .quiz-grid {
                 grid-template-columns: 1fr;
             }
 
-            .qr-section {
+            .login-section {
                 padding: 40px 20px;
             }
-        }
 
-        .enter-quiz-btn {
-            background: linear-gradient(135deg, #28a745, #20c997);
-            color: white;
-            padding: 15px 40px;
-            border-radius: 25px;
-            border: none;
-            font-weight: bold;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);
-        }
-
-        .enter-quiz-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.4);
+            .login-form input {
+                width: 100%;
+            }
         }
 
         @keyframes ripple {
@@ -461,6 +500,7 @@
     </style>
 </head>
 <body>
+    <div class="particle-background" id="particleBackground"></div>
     <div class="container">
         <div class="hero">
             <div class="floating-shapes">
@@ -469,102 +509,76 @@
                 <div class="shape"></div>
             </div>
             <h1>🎯 Quiz Hub</h1>
-            <p>Khám phá kiến thức với các bài quiz thú vị và thử thách bản thân!</p>
+            <p>Khám phá kiến thức với các bài quiz đầy thử thách trong không gian hiện đại!</p>
         </div>
 
         <div class="welcome-message" id="welcomeMessage">
             🎉 Chào mừng bạn đến với Quiz Hub! Hãy chọn quiz yêu thích để bắt đầu.
         </div>
 
-        <!-- Phần QR Section -->
-        <div class="qr-section" id="qrSection">
-            <div class="qr-info">
-                <h2>📱 Quét QR để bắt đầu</h2>
-                <p>Sử dụng camera điện thoại để quét mã QR bên dưới. Sau khi quét, bạn sẽ được chuyển đến trang với đầy đủ các quiz thú vị để lựa chọn!</p>
+        <!-- Phần Login Section -->
+        <div class="login-section" id="loginSection">
+            <div class="login-info">
+                <h2>🔒 Đăng nhập</h2>
+                <p>Nhập mật khẩu để mở khóa </p>
             </div>
             
-            <div class="qr-code-wrapper">
-                <canvas id="qrcode" width="250" height="250"></canvas>
-            </div>
-
-            <div class="qr-instructions">
-                <h3>📲 Hướng dẫn sử dụng</h3>
-                <p>1. Mở camera trên điện thoại<br>
-                2. Hướng camera vào mã QR<br>
-                3. Nhấn vào link hiển thị để truy cập</p>
-            </div>
-
-            <div class="social-links">
-                <button class="social-btn" onclick="shareQR()">📤 Chia sẻ QR</button>
-                <button class="social-btn" onclick="downloadQR()">💾 Tải QR</button>
-            </div>
-
-            <div style="margin-top: 30px;">
-                <p style="color: #666; margin-bottom: 15px; font-size: 1rem;">
-                    Hoặc nếu bạn đang dùng máy tính:
-                </p>
-                <button id="enterQuizBtn" class="enter-quiz-btn">
-                    🚀 Vào Quiz Ngay
-                </button>
+            <div class="login-form">
+                <input type="password" id="passwordInput" placeholder="Nhập mật khẩu">
+                <button class="btn-ripple" onclick="checkPassword()">🚀 Truy cập Quiz</button>
+                <div class="error-message" id="errorMessage">Mật khẩu không đúng!</div>
             </div>
         </div>
 
         <!-- Phần Quiz Section -->
-        <div class="quiz-section" id="quizSection">
-            <button class="back-btn" onclick="showQRSection()">← Quay lại QR</button>
+        <div class="quiz-section hidden" id="quizSection">
+            <button class="back-btn" onclick="showLoginSection()">← Quay lại Đăng nhập</button>
             
             <div class="quiz-header">
-                <h2>🎮 Chọn Quiz của bạn</h2>
-                <p>Khám phá các chủ đề thú vị và thử thách kiến thức của bạn</p>
+                <h2>🎮 Quizz CNXH</h2>
             </div>
 
             <div class="quiz-grid">
                 <div class="quiz-card">
                     <div class="quiz-icon">🧠</div>
-                    <h3>Quiz Kiến Thức Tổng Hợp</h3>
-                    <p>Thử thách kiến thức của bạn với các câu hỏi đa dạng từ khoa học, văn hóa đến thể thao.</p>
-                    <a href="https://quizizz.com/join" class="quiz-btn btn-ripple" target="_blank">Bắt đầu Quiz</a>
+                    <h3>Chương 1 CNXH</h3>
+                    <a href="https://quizizz.com/embed/quiz/68482f927540fa0dbf6bbf99" class="quiz-btn btn-ripple" target="_blank">Bắt đầu Quiz</a>
                 </div>
 
                 <div class="quiz-card">
                     <div class="quiz-icon">🌍</div>
-                    <h3>Quiz Địa Lý Thế Giới</h3>
-                    <p>Khám phá thế giới qua các câu hỏi về địa lý, văn hóa và đặc điểm của các quốc gia.</p>
-                    <a href="https://quizizz.com/join" class="quiz-btn btn-ripple" target="_blank">Khám phá ngay</a>
+                    <h3>Chương 2 CNXH</h3>
+                    <a href="https://quizizz.com/embed/quiz/684830d60e8109d2585e54e8" class="quiz-btn btn-ripple" target="_blank">Bắt đầu Quiz</a>
                 </div>
 
                 <div class="quiz-card">
                     <div class="quiz-icon">🔬</div>
-                    <h3>Quiz Khoa Học</h3>
-                    <p>Thử thách với các câu hỏi về vật lý, hóa học, sinh học và những khám phá khoa học mới nhất.</p>
-                    <a href="https://quizizz.com/join" class="quiz-btn btn-ripple" target="_blank">Thử thách</a>
+                    <h3>Chương 3 CNXH</h3>
+                    <a href="https://quizizz.com/embed/quiz/684833c8ffde798ef5390f31" class="quiz-btn btn-ripple" target="_blank">Bắt đầu Quiz</a>
                 </div>
 
                 <div class="quiz-card">
                     <div class="quiz-icon">🎭</div>
-                    <h3>Quiz Văn Hóa Việt Nam</h3>
-                    <p>Tìm hiểu về lịch sử, văn hóa và truyền thống của đất nước Việt Nam thông qua các câu hỏi thú vị.</p>
-                    <a href="https://quizizz.com/join" class="quiz-btn btn-ripple" target="_blank">Tham gia</a>
+                    <h3>Chương 4 CNXH </h3>
+                    <a href="https://quizizz.com/embed/quiz/6848364a77ebd328f4df9c66" class="quiz-btn btn-ripple" target="_blank">Bắt đầu Quiz</a>
                 </div>
 
                 <div class="quiz-card">
                     <div class="quiz-icon">🎨</div>
-                    <h3>Quiz Nghệ Thuật</h3>
-                    <p>Khám phá thế giới nghệ thuật với các câu hỏi về hội họa, âm nhạc và điện ảnh nổi tiếng.</p>
-                    <a href="https://quizizz.com/join" class="quiz-btn btn-ripple" target="_blank">Khám phá</a>
+                    <h3>Chương 5 CNXH</h3>
+                    <a href="https://quizizz.com/embed/quiz/6848392f65490a51b0822246" class="quiz-btn btn-ripple" target="_blank">Bắt đầu Quiz</a>
                 </div>
 
                 <div class="quiz-card">
                     <div class="quiz-icon">⚡</div>
-                    <h3>Quiz Nhanh 5 Phút</h3>
-                    <p>Thử thách tốc độ với quiz nhanh chỉ trong 5 phút. Hoàn hảo cho giờ nghỉ giải lao!</p>
-                    <a href="https://quizizz.com/join" class="quiz-btn btn-ripple" target="_blank">Thử ngay</a>
+                    <h3>Chương 6 CNXH</h3>
+                    <a href="https://quizizz.com/embed/quiz/68483b63842845d8aaee5268" class="quiz-btn btn-ripple" target="_blank">Bắt đầu Quiz</a>
                 </div>
             </div>
         </div>
 
         <div class="footer">
-            <p>© 2024 Quiz Hub - Nơi khám phá kiến thức không giới hạn</p>
+            <p>© 2025 Quiz Hub - Nơi khám phá kiến thức không giới hạn</p>
             <div class="social-links">
                 <a href="#" class="social-btn">Facebook</a>
                 <a href="#" class="social-btn">Instagram</a>
@@ -574,74 +588,41 @@
     </div>
 
     <script>
-        let qrCanvas = null;
-
-        // Tạo QR code
-        function generateQRCode() {
-            try {
-                const qrContainer = document.getElementById('qrcode');
-                const currentURL = window.location.href.split('?')[0];
-                const qrURL = currentURL + '?mode=quiz';
-                
-                qrContainer.innerHTML = '';
-                
-                const qr = new QRious({
-                    element: qrContainer,
-                    value: qrURL,
-                    size: 250,
-                    background: 'white',
-                    foreground: '#333333',
-                    level: 'M'
-                });
-                
-                qrCanvas = qrContainer;
-                console.log('QR code generated successfully!');
-                
-            } catch (error) {
-                console.error('Error generating QR code:', error);
-                generateQRCodeFallback();
+        // Tạo particle background
+        function createParticles() {
+            const particleContainer = document.getElementById('particleBackground');
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.width = `${Math.random() * 5 + 2}px`;
+                particle.style.height = particle.style.width;
+                particle.style.left = `${Math.random() * 100}vw`;
+                particle.style.top = `${Math.random() * 100}vh`;
+                particle.style.animationDelay = `${Math.random() * 10}s`;
+                particleContainer.appendChild(particle);
             }
-        }
-        
-        // Fallback method sử dụng API
-        function generateQRCodeFallback() {
-            const qrContainer = document.getElementById('qrcode');
-            const currentURL = window.location.href.split('?')[0];
-            const qrURL = currentURL + '?mode=quiz';
-            
-            const img = document.createElement('img');
-            img.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(qrURL)}`;
-            img.alt = 'QR Code';
-            img.style.maxWidth = '100%';
-            img.style.height = 'auto';
-            
-            qrContainer.innerHTML = '';
-            qrContainer.appendChild(img);
-            
-            console.log('QR code generated using fallback method');
         }
 
         // Hiển thị phần quiz
         function showQuizSection() {
-            const qrSection = document.getElementById('qrSection');
+            const loginSection = document.getElementById('loginSection');
             const quizSection = document.getElementById('quizSection');
             const welcomeMessage = document.getElementById('welcomeMessage');
             
-            // Ẩn QR section với animation
-            qrSection.style.opacity = '0';
-            qrSection.style.transform = 'translateY(-50px)';
+            loginSection.style.opacity = '0';
+            loginSection.style.transform = 'translateY(-50px)';
             
             setTimeout(() => {
-                qrSection.classList.add('hidden');
+                loginSection.classList.add('hidden');
                 
-                // Hiển thị welcome message
                 welcomeMessage.classList.add('show');
                 
-                // Hiển thị quiz section
                 setTimeout(() => {
+                    quizSection.classList.remove('hidden');
                     quizSection.classList.add('show');
                     
-                    // Animate các quiz cards
                     setTimeout(() => {
                         const cards = document.querySelectorAll('.quiz-card');
                         cards.forEach((card, index) => {
@@ -654,74 +635,43 @@
             }, 500);
         }
 
-        // Hiển thị phần QR
-        function showQRSection() {
-            const qrSection = document.getElementById('qrSection');
+        // Hiển thị phần login
+        function showLoginSection() {
+            const loginSection = document.getElementById('loginSection');
             const quizSection = document.getElementById('quizSection');
             const welcomeMessage = document.getElementById('welcomeMessage');
             
-            // Ẩn quiz section
             quizSection.classList.remove('show');
             welcomeMessage.classList.remove('show');
             
-            // Reset quiz cards animation
             const cards = document.querySelectorAll('.quiz-card');
             cards.forEach(card => {
                 card.classList.remove('animate');
             });
             
             setTimeout(() => {
-                // Hiển thị QR section
-                qrSection.classList.remove('hidden');
-                qrSection.style.opacity = '1';
-                qrSection.style.transform = 'translateY(0)';
+                loginSection.classList.remove('hidden');
+                loginSection.style.opacity = '1';
+                loginSection.style.transform = 'translateY(0)';
             }, 500);
         }
 
-        // Kiểm tra URL params
-        function checkURLParams() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const mode = urlParams.get('mode');
+        // Kiểm tra mật khẩu
+        function checkPassword() {
+            const passwordInput = document.getElementById('passwordInput');
+            const errorMessage = document.getElementById('errorMessage');
+            const correctPassword = '050902';
             
-            if (mode === 'quiz') {
-                // Tự động chuyển sang phần quiz
-                setTimeout(() => {
-                    showQuizSection();
-                }, 1000);
-            }
-        }
-
-        // Tải QR code
-        function downloadQR() {
-            if (qrCanvas) {
-                try {
-                    const link = document.createElement('a');
-                    link.download = 'quiz-hub-qr.png';
-                    link.href = qrCanvas.toDataURL();
-                    link.click();
-                } catch (error) {
-                    alert('Không thể tải QR code. Vui lòng thử lại!');
-                }
-            }
-        }
-
-        // Chia sẻ QR
-        function shareQR() {
-            const currentURL = window.location.href.split('?')[0] + '?mode=quiz';
-            
-            if (navigator.share) {
-                navigator.share({
-                    title: 'Quiz Hub - Khám Phá Kiến Thức',
-                    text: 'Tham gia các quiz thú vị tại Quiz Hub!',
-                    url: currentURL
-                });
+            if (passwordInput.value === correctPassword) {
+                errorMessage.classList.remove('show');
+                showQuizSection();
             } else {
-                // Fallback: copy to clipboard
-                navigator.clipboard.writeText(currentURL).then(() => {
-                    alert('Link đã được sao chép! Bạn có thể chia sẻ với bạn bè.');
-                }).catch(() => {
-                    alert('Link: ' + currentURL);
-                });
+                errorMessage.classList.add('show');
+                passwordInput.value = '';
+                passwordInput.classList.add('shake');
+                setTimeout(() => {
+                    passwordInput.classList.remove('shake');
+                }, 400);
             }
         }
 
@@ -741,7 +691,7 @@
                     ripple.style.top = y + 'px';
                     ripple.style.position = 'absolute';
                     ripple.style.borderRadius = '50%';
-                    ripple.style.background = 'rgba(255,255,255,0.5)';
+                    ripple.style.background = 'rgba(255, 69, 0, 0.5)';
                     ripple.style.transform = 'scale(0)';
                     ripple.style.animation = 'ripple 0.6s linear';
                     ripple.style.pointerEvents = 'none';
@@ -757,25 +707,15 @@
 
         // Khởi tạo khi trang load
         document.addEventListener('DOMContentLoaded', function() {
-            // Generate QR code
-            setTimeout(() => {
-                generateQRCode();
-            }, 500);
-            
-            // Check URL parameters
-            checkURLParams();
-            
-            // Add button effects
+            createParticles();
             addRippleEffect();
             
-            // Add event listener for Enter Quiz button
-            const enterQuizBtn = document.getElementById('enterQuizBtn');
-            if (enterQuizBtn) {
-                enterQuizBtn.addEventListener('click', function() {
-                    console.log('Enter Quiz button clicked!');
-                    showQuizSection();
-                });
-            }
+            const passwordInput = document.getElementById('passwordInput');
+            passwordInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    checkPassword();
+                }
+            });
         });
 
         // Keyboard shortcut để test (Ctrl + Q)
